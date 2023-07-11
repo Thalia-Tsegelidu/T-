@@ -1,0 +1,473 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!-- saved from url=(0057)https://learningapps.org/tools/40/21/watch?id=pg96pok5a23 -->
+<html lang="gr" data-lt-installed="true"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style type="text/css">.ui-draggable {-ms-touch-action:none;}</style>
+    
+    <title>Kreuzworträtsel</title>
+
+<style>
+html,body{
+ height:100%;
+ padding:0px;
+ margin:0px;
+}
+
+</style>
+
+<script async="" src="./matomo.js"></script><script>/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+var __webpack_exports__ = {};
+
+;// CONCATENATED MODULE: ../core/dist/flash-identifiers.js
+const FLASH_MIMETYPE = "application/x-shockwave-flash";
+const FUTURESPLASH_MIMETYPE = "application/futuresplash";
+const FLASH7_AND_8_MIMETYPE = "application/x-shockwave-flash2-preview";
+const FLASH_MOVIE_MIMETYPE = "application/vnd.adobe.flash.movie";
+const FLASH_ACTIVEX_CLASSID = "clsid:D27CDB6E-AE6D-11cf-96B8-444553540000";
+
+;// CONCATENATED MODULE: ../core/dist/plugin-polyfill.js
+
+/**
+ * Replacement object for `MimeTypeArray` that lets us install new fake mime
+ * types.
+ *
+ * Unlike plugins we can at least enumerate mime types in Firefox, so we don't
+ * lose data.
+ *
+ * We also expose a method called `install` which adds a new plugin. This is
+ * used to falsify Flash detection. If the existing `navigator.mimeTypes` has an
+ * `install` method, you should not use `RuffleMimeTypeArray` as some other
+ * plugin emulator is already present.
+ */
+class RuffleMimeTypeArray {
+    constructor(mimeTypes) {
+        this.__mimeTypes = [];
+        this.__namedMimeTypes = {};
+        if (mimeTypes) {
+            for (let i = 0; i < mimeTypes.length; i++) {
+                this.install(mimeTypes[i]);
+            }
+        }
+    }
+    /**
+     * Install a MIME Type into the array.
+     *
+     * @param mimeType The mime type to install
+     */
+    install(mimeType) {
+        const index = this.__mimeTypes.length;
+        this.__mimeTypes.push(mimeType);
+        this.__namedMimeTypes[mimeType.type] = mimeType;
+        this[mimeType.type] = mimeType;
+        this[index] = mimeType;
+    }
+    item(index) {
+        // This behavior is done to emulate a 32-bit uint,
+        // which browsers use.
+        return this.__mimeTypes[index >>> 0];
+    }
+    namedItem(name) {
+        return this.__namedMimeTypes[name];
+    }
+    get length() {
+        return this.__mimeTypes.length;
+    }
+    [Symbol.iterator]() {
+        return this.__mimeTypes[Symbol.iterator]();
+    }
+}
+/**
+ * Equivalent object to `Plugin` that allows us to falsify plugins.
+ */
+class RufflePlugin extends RuffleMimeTypeArray {
+    constructor(name, description, filename) {
+        super();
+        this.name = name;
+        this.description = description;
+        this.filename = filename;
+    }
+}
+/**
+ * Replacement object for `PluginArray` that lets us install new fake plugins.
+ *
+ * This object needs to wrap the native plugin array, since the user might have
+ * actual plugins installed. Firefox doesn't let us enumerate the array, though,
+ * which has some consequences. Namely, we can't actually perfectly wrap the
+ * native plugin array, at least unless there's some secret "unresolved object
+ * property name handler" that I've never known before in JS...
+ *
+ * We can still wrap `namedItem` perfectly at least.
+ *
+ * We also expose a method called `install` which adds a new plugin. This is
+ * used to falsify Flash detection. If the existing `navigator.plugins` has an
+ * `install` method, you should not use `RufflePluginArray` as some other plugin
+ * emulator is already present.
+ */
+class RufflePluginArray {
+    constructor(plugins) {
+        this.__plugins = [];
+        this.__namedPlugins = {};
+        for (let i = 0; i < plugins.length; i++) {
+            this.install(plugins[i]);
+        }
+    }
+    install(plugin) {
+        const index = this.__plugins.length;
+        this.__plugins.push(plugin);
+        this.__namedPlugins[plugin.name] = plugin;
+        this[plugin.name] = plugin;
+        this[index] = plugin;
+    }
+    item(index) {
+        // This behavior is done to emulate a 32-bit uint,
+        // which browsers use. Cloudflare's anti-bot
+        // checks rely on this.
+        return this.__plugins[index >>> 0];
+    }
+    namedItem(name) {
+        return this.__namedPlugins[name];
+    }
+    refresh() {
+        // Nothing to do, we just need to define the method.
+    }
+    [Symbol.iterator]() {
+        return this.__plugins[Symbol.iterator]();
+    }
+    get length() {
+        return this.__plugins.length;
+    }
+}
+/**
+ * A fake plugin designed to trigger Flash detection scripts.
+ */
+const FLASH_PLUGIN = new RufflePlugin("Shockwave Flash", "Shockwave Flash 32.0 r0", "ruffle.js");
+/**
+ * A fake plugin designed to allow early detection of if the Ruffle extension is in use.
+ */
+const RUFFLE_EXTENSION = new RufflePlugin("Ruffle Extension", "Ruffle Extension", "ruffle.js");
+FLASH_PLUGIN.install({
+    type: FUTURESPLASH_MIMETYPE,
+    description: "Shockwave Flash",
+    suffixes: "spl",
+    enabledPlugin: FLASH_PLUGIN,
+});
+FLASH_PLUGIN.install({
+    type: FLASH_MIMETYPE,
+    description: "Shockwave Flash",
+    suffixes: "swf",
+    enabledPlugin: FLASH_PLUGIN,
+});
+FLASH_PLUGIN.install({
+    type: FLASH7_AND_8_MIMETYPE,
+    description: "Shockwave Flash",
+    suffixes: "swf",
+    enabledPlugin: FLASH_PLUGIN,
+});
+FLASH_PLUGIN.install({
+    type: FLASH_MOVIE_MIMETYPE,
+    description: "Shockwave Flash",
+    suffixes: "swf",
+    enabledPlugin: FLASH_PLUGIN,
+});
+RUFFLE_EXTENSION.install({
+    type: "",
+    description: "Ruffle Detection",
+    suffixes: "",
+    enabledPlugin: RUFFLE_EXTENSION,
+});
+/**
+ * Install a fake plugin such that detectors will see it in `navigator.plugins`.
+ *
+ * This function takes care to check if the existing implementation of
+ * `navigator.plugins` already accepts fake plugin entries. If so, it will use
+ * that version of the plugin array. This allows the plugin polyfill to compose
+ * across multiple plugin emulators with the first emulator's polyfill winning.
+ *
+ * @param plugin The plugin to install
+ */
+function installPlugin(plugin) {
+    if (!("install" in navigator.plugins) || !navigator.plugins["install"]) {
+        Object.defineProperty(navigator, "plugins", {
+            value: new RufflePluginArray(navigator.plugins),
+            writable: false,
+        });
+    }
+    const plugins = navigator.plugins;
+    plugins.install(plugin);
+    if (plugin.length > 0 &&
+        (!("install" in navigator.mimeTypes) || !navigator.mimeTypes["install"])) {
+        Object.defineProperty(navigator, "mimeTypes", {
+            value: new RuffleMimeTypeArray(navigator.mimeTypes),
+            writable: false,
+        });
+    }
+    const mimeTypes = navigator.mimeTypes;
+    for (let i = 0; i < plugin.length; i += 1) {
+        mimeTypes.install(plugin[i]);
+    }
+}
+
+;// CONCATENATED MODULE: ./src/plugin-polyfill.ts
+// This file is compiled and then injected into content.ts's compiled form.
+
+installPlugin(FLASH_PLUGIN);
+installPlugin(RUFFLE_EXTENSION);
+
+/******/ })()
+;</script><script charset="utf-8" src="chrome-extension://donbcfbmhbcapadipfkeojnmajbakjdc/dist/ruffle.js?id=55155292732"></script><link type="text/css" rel="stylesheet" href="./LearningApps.css"><link type="text/css" rel="stylesheet" href="./bootstrap.css"></head>
+<body style="overflow-wrap: break-word;" data-new-gr-c-s-check-loaded="14.1114.0" data-gr-ext-installed="">
+
+<!-- Matomo -->
+<script>
+  var _paq = window._paq = window._paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(["trackPageView"]);
+  _paq.push(["enableLinkTracking"]);
+  (function() {
+    var u="//analytics.learningapps.org/";
+    _paq.push(["setTrackerUrl", u+"matomo.php"]);
+    _paq.push(["setSiteId", "1"]);
+    var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0];
+    g.async=true; g.src=u+"matomo.js"; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Matomo Code -->
+
+<script type="text/javascript" src="./data"></script>
+<script type="text/javascript" src="./AppClientServer.js"></script>
+<script type="text/javascript">/* <![CDATA[ */
+ var AppID = "pg96pok5a23";
+ var AppClientLanguage = "GR";
+ var AppClient = new AppClientClass(AppID,false,0);
+/* ]]> */
+</script><div id="AppClientLoadingPanel" style="position: absolute; width: 100%; height: 100%; left: 0px; top: 0px; box-sizing: border-box; z-index: 999999; background-color: rgb(255, 255, 255); display: none;"><table style="box-sizing:border-box; width:100%;height:100%"><tbody><tr><td width="100%" align="center" style="color:#333;font-family:Arial;" id="LoadingPanelContent"><img src="./loading.gif" alt="" style="vertical-align:middle;margin:5px"> <b> Loading ... </b></td></tr></tbody></table></div>
+
+<script type="text/javascript" src="./crossword.js"></script>
+
+<div id="checksolutionBtnPanel"><div id="checkSolutionBtn" onclick="AppClient.checkSolution()">
+  <i class="glyphicon glyphicon-check"></i></div>
+</div>
+
+<div id="wrapper" style="width:100%;height:100%;top:0;left:0;position:absolute;overflow:auto">
+
+<div id="k"><table id="crossword" style="width: 100%; background: url(&quot;https://dbimg.eu/i/uwx5lrpuyj.jpg&quot;) center center no-repeat transparent;" cellpadding="0" cellspacing="0"><tbody><tr><td id="innerCrossword" align="center"><table cellspacing="0" cellpadding="0"><tbody><tr><td><div id="grid_41_36" class="field"></div></td><td><div id="grid_42_36" class="field"></div></td><td><div id="grid_43_36" class="field"></div></td><td><div id="grid_44_36" class="field"></div></td><td><div id="grid_45_36" class="field"></div></td><td><div id="grid_46_36" class="field"></div></td><td><div id="grid_47_36" class="field"></div></td><td><div id="grid_48_36" class="field"></div></td><td><div id="grid_49_36" class="field"></div></td><td><div id="grid_50_36" class="field"></div></td><td><div id="grid_51_36" class="field"></div></td><td><div id="grid_52_36" class="field"></div></td></tr><tr><td><div id="grid_41_37" class="field"></div></td><td><div id="grid_42_37" class="field"></div></td><td><div id="grid_43_37" class="field"></div></td><td><div id="grid_44_37" class="field"></div></td><td><div id="grid_45_37" class="field"></div></td><td><div id="grid_46_37_number" onclick="selectCrosswordField(46,37)" style="z-Index:3;cursor:pointer;position:absolute;font-size:6pt;margin:2px">1</div><div id="grid_46_37" style="position:relative;z-Index:1;" onclick="selectCrosswordField(46,37)" class="field filled"> </div></td><td><div id="grid_47_37" class="field"></div></td><td><div id="grid_48_37" class="field"></div></td><td><div id="grid_49_37" class="field"></div></td><td><div id="grid_50_37" class="field"></div></td><td><div id="grid_51_37" class="field"></div></td><td><div id="grid_52_37" class="field"></div></td></tr><tr><td><div id="grid_41_38" class="field"></div></td><td><div id="grid_42_38" class="field"></div></td><td><div id="grid_43_38" class="field"></div></td><td><div id="grid_44_38" class="field"></div></td><td><div id="grid_45_38_number" onclick="selectCrosswordField(45,38)" style="z-Index:3;cursor:pointer;position:absolute;font-size:6pt;margin:2px">3</div><div id="grid_45_38" style="position:relative;z-Index:1;" onclick="selectCrosswordField(45,38)" class="field filled"> </div></td><td><div id="grid_46_38" style="position:relative;z-Index:1;" onclick="selectCrosswordField(46,38)" class="field filled"> </div></td><td><div id="grid_47_38" style="position:relative;z-Index:1;" onclick="selectCrosswordField(47,38)" class="field filled"> </div></td><td><div id="grid_48_38" style="position:relative;z-Index:1;" onclick="selectCrosswordField(48,38)" class="field filled"> </div></td><td><div id="grid_49_38" style="position:relative;z-Index:1;" onclick="selectCrosswordField(49,38)" class="field filled"> </div></td><td><div id="grid_50_38" style="position:relative;z-Index:1;" onclick="selectCrosswordField(50,38)" class="field filled"> </div></td><td><div id="grid_51_38" style="position:relative;z-Index:1;" onclick="selectCrosswordField(51,38)" class="field filled"> </div></td><td><div id="grid_52_38" class="field"></div></td></tr><tr><td><div id="grid_41_39" class="field"></div></td><td><div id="grid_42_39" class="field"></div></td><td><div id="grid_43_39" class="field"></div></td><td><div id="grid_44_39" class="field"></div></td><td><div id="grid_45_39" class="field"></div></td><td><div id="grid_46_39" style="position:relative;z-Index:1;" onclick="selectCrosswordField(46,39)" class="field filled"> </div></td><td><div id="grid_47_39" class="field"></div></td><td><div id="grid_48_39" class="field"></div></td><td><div id="grid_49_39" class="field"></div></td><td><div id="grid_50_39" class="field"></div></td><td><div id="grid_51_39" class="field"></div></td><td><div id="grid_52_39" class="field"></div></td></tr><tr><td><div id="grid_41_40" class="field"></div></td><td><div id="grid_42_40" class="field"></div></td><td><div id="grid_43_40" class="field"></div></td><td><div id="grid_44_40" class="field"></div></td><td><div id="grid_45_40" class="field"></div></td><td><div id="grid_46_40" style="position:relative;z-Index:1;" onclick="selectCrosswordField(46,40)" class="field filled"> </div></td><td><div id="grid_47_40" class="field"></div></td><td><div id="grid_48_40" class="field"></div></td><td><div id="grid_49_40" class="field"></div></td><td><div id="grid_50_40" class="field"></div></td><td><div id="grid_51_40" class="field"></div></td><td><div id="grid_52_40" class="field"></div></td></tr><tr><td><div id="grid_41_41" class="field"></div></td><td><div id="grid_42_41" class="field"></div></td><td><div id="grid_43_41" class="field"></div></td><td><div id="grid_44_41" class="field"></div></td><td><div id="grid_45_41_number" onclick="selectCrosswordField(45,41)" style="z-Index:3;cursor:pointer;position:absolute;font-size:6pt;margin:2px">4</div><div id="grid_45_41" style="position:relative;z-Index:1;" onclick="selectCrosswordField(45,41)" class="field filled"> </div></td><td><div id="grid_46_41" style="position:relative;z-Index:1;" onclick="selectCrosswordField(46,41)" class="field filled"> </div></td><td><div id="grid_47_41" style="position:relative;z-Index:1;" onclick="selectCrosswordField(47,41)" class="field filled"> </div></td><td><div style="position: absolute; z-index: 2;"><div style="cursor:pointer;position:absolute;" onclick="selectCrosswordField(48,41)"><div class="field solution" style="position:absolute"></div><div style="font-size:5pt;margin:2px;margin-top:2.6em">I</div></div></div><div id="grid_48_41" style="position:relative;z-Index:1;" onclick="selectCrosswordField(48,41)" class="field filled"> </div></td><td><div id="grid_49_41" class="field"></div></td><td><div id="grid_50_41" class="field"></div></td><td><div id="grid_51_41" class="field"></div></td><td><div id="grid_52_41" class="field"></div></td></tr><tr><td><div id="grid_41_42" class="field"></div></td><td><div id="grid_42_42" class="field"></div></td><td><div id="grid_43_42" class="field"></div></td><td><div id="grid_44_42" class="field"></div></td><td><div id="grid_45_42" class="field"></div></td><td><div id="grid_46_42" style="position:relative;z-Index:1;" onclick="selectCrosswordField(46,42)" class="field filled"> </div></td><td><div id="grid_47_42" class="field"></div></td><td><div id="grid_48_42" class="field"></div></td><td><div id="grid_49_42" class="field"></div></td><td><div id="grid_50_42" class="field"></div></td><td><div id="grid_51_42" class="field"></div></td><td><div id="grid_52_42" class="field"></div></td></tr><tr><td><div id="grid_41_43" class="field"></div></td><td><div id="grid_42_43" class="field"></div></td><td><div id="grid_43_43" class="field"></div></td><td><div id="grid_44_43" class="field"></div></td><td><div id="grid_45_43" class="field"></div></td><td><div id="grid_46_43" style="position:relative;z-Index:1;" onclick="selectCrosswordField(46,43)" class="field filled"> </div></td><td><div id="grid_47_43" class="field"></div></td><td><div id="grid_48_43" class="field"></div></td><td><div id="grid_49_43" class="field"></div></td><td><div id="grid_50_43" class="field"></div></td><td><div id="grid_51_43" class="field"></div></td><td><div id="grid_52_43" class="field"></div></td></tr><tr><td><div id="grid_41_44" class="field"></div></td><td><div id="grid_42_44" class="field"></div></td><td><div id="grid_43_44_number" onclick="selectCrosswordField(43,44)" style="z-Index:3;cursor:pointer;position:absolute;font-size:6pt;margin:2px">2</div><div id="grid_43_44" style="position:relative;z-Index:1;" onclick="selectCrosswordField(43,44)" class="field filled"> </div></td><td><div id="grid_44_44" style="position:relative;z-Index:1;" onclick="selectCrosswordField(44,44)" class="field filled"> </div></td><td><div id="grid_45_44" style="position:relative;z-Index:1;" onclick="selectCrosswordField(45,44)" class="field filled"> </div></td><td><div id="grid_46_44" style="position:relative;z-Index:1;" onclick="selectCrosswordField(46,44)" class="field filled"> </div></td><td><div id="grid_47_44" style="position:relative;z-Index:1;" onclick="selectCrosswordField(47,44)" class="field filled"> </div></td><td><div id="grid_48_44" style="position:relative;z-Index:1;" onclick="selectCrosswordField(48,44)" class="field filled"> </div></td><td><div id="grid_49_44" style="position:relative;z-Index:1;" onclick="selectCrosswordField(49,44)" class="field filled"> </div></td><td><div id="grid_50_44" style="position:relative;z-Index:1;" onclick="selectCrosswordField(50,44)" class="field filled"> </div></td><td><div id="grid_51_44" class="field"></div></td><td><div id="grid_52_44" class="field"></div></td></tr><tr><td><div id="grid_41_45" class="field"></div></td><td><div id="grid_42_45" class="field"></div></td><td><div id="grid_43_45" class="field"></div></td><td><div id="grid_44_45" class="field"></div></td><td><div id="grid_45_45" class="field"></div></td><td><div id="grid_46_45" style="position:relative;z-Index:1;" onclick="selectCrosswordField(46,45)" class="field filled"> </div></td><td><div id="grid_47_45" class="field"></div></td><td><div id="grid_48_45" class="field"></div></td><td><div id="grid_49_45" class="field"></div></td><td><div id="grid_50_45" class="field"></div></td><td><div id="grid_51_45" class="field"></div></td><td><div id="grid_52_45" class="field"></div></td></tr><tr><td><div id="grid_41_46" class="field"></div></td><td><div id="grid_42_46" class="field"></div></td><td><div id="grid_43_46" class="field"></div></td><td><div id="grid_44_46" class="field"></div></td><td><div id="grid_45_46" class="field"></div></td><td><div id="grid_46_46" style="position:relative;z-Index:1;" onclick="selectCrosswordField(46,46)" class="field filled"> </div></td><td><div id="grid_47_46" class="field"></div></td><td><div id="grid_48_46" class="field"></div></td><td><div id="grid_49_46" class="field"></div></td><td><div id="grid_50_46" class="field"></div></td><td><div id="grid_51_46" class="field"></div></td><td><div id="grid_52_46" class="field"></div></td></tr><tr><td><div id="grid_41_47" class="field"></div></td><td><div id="grid_42_47_number" onclick="selectCrosswordField(42,47)" style="z-Index:3;cursor:pointer;position:absolute;font-size:6pt;margin:2px">5</div><div id="grid_42_47" style="position:relative;z-Index:1;" onclick="selectCrosswordField(42,47)" class="field filled"> </div></td><td><div id="grid_43_47" style="position:relative;z-Index:1;" onclick="selectCrosswordField(43,47)" class="field filled"> </div></td><td><div id="grid_44_47" style="position:relative;z-Index:1;" onclick="selectCrosswordField(44,47)" class="field filled"> </div></td><td><div id="grid_45_47" style="position:relative;z-Index:1;" onclick="selectCrosswordField(45,47)" class="field filled"> </div></td><td><div id="grid_46_47" style="position:relative;z-Index:1;" onclick="selectCrosswordField(46,47)" class="field filled"> </div></td><td><div id="grid_47_47" class="field"></div></td><td><div id="grid_48_47" class="field"></div></td><td><div id="grid_49_47" class="field"></div></td><td><div id="grid_50_47" class="field"></div></td><td><div id="grid_51_47" class="field"></div></td><td><div id="grid_52_47" class="field"></div></td></tr><tr><td><div id="grid_41_48" class="field"></div></td><td><div id="grid_42_48" class="field"></div></td><td><div id="grid_43_48" class="field"></div></td><td><div id="grid_44_48" class="field"></div></td><td><div id="grid_45_48" class="field"></div></td><td><div id="grid_46_48" style="position:relative;z-Index:1;" onclick="selectCrosswordField(46,48)" class="field filled"> </div></td><td><div id="grid_47_48" class="field"></div></td><td><div id="grid_48_48" class="field"></div></td><td><div id="grid_49_48" class="field"></div></td><td><div id="grid_50_48" class="field"></div></td><td><div id="grid_51_48" class="field"></div></td><td><div id="grid_52_48" class="field"></div></td></tr><tr><td><div id="grid_41_49" class="field"></div></td><td><div id="grid_42_49" class="field"></div></td><td><div id="grid_43_49" class="field"></div></td><td><div id="grid_44_49" class="field"></div></td><td><div id="grid_45_49" class="field"></div></td><td><div id="grid_46_49" style="position:relative;z-Index:1;" onclick="selectCrosswordField(46,49)" class="field filled"> </div></td><td><div id="grid_47_49" class="field"></div></td><td><div id="grid_48_49" class="field"></div></td><td><div id="grid_49_49" class="field"></div></td><td><div id="grid_50_49" class="field"></div></td><td><div id="grid_51_49" class="field"></div></td><td><div id="grid_52_49" class="field"></div></td></tr><tr><td><div id="grid_41_50" class="field"></div></td><td><div id="grid_42_50" class="field"></div></td><td><div id="grid_43_50" class="field"></div></td><td><div id="grid_44_50" class="field"></div></td><td><div id="grid_45_50" class="field"></div></td><td><div id="grid_46_50" style="position:relative;z-Index:1;" onclick="selectCrosswordField(46,50)" class="field filled"> </div></td><td><div id="grid_47_50" class="field"></div></td><td><div id="grid_48_50" class="field"></div></td><td><div id="grid_49_50" class="field"></div></td><td><div id="grid_50_50" class="field"></div></td><td><div id="grid_51_50" class="field"></div></td><td><div id="grid_52_50" class="field"></div></td></tr><tr><td><div id="grid_41_51" class="field"></div></td><td><div id="grid_42_51" class="field"></div></td><td><div id="grid_43_51" class="field"></div></td><td><div id="grid_44_51" class="field"></div></td><td><div id="grid_45_51" class="field"></div></td><td><div id="grid_46_51" style="position:relative;z-Index:1;" onclick="selectCrosswordField(46,51)" class="field filled"> </div></td><td><div id="grid_47_51" class="field"></div></td><td><div id="grid_48_51" class="field"></div></td><td><div id="grid_49_51" class="field"></div></td><td><div id="grid_50_51" class="field"></div></td><td><div id="grid_51_51" class="field"></div></td><td><div id="grid_52_51" class="field"></div></td></tr><tr><td><div id="grid_41_52" class="field"></div></td><td><div id="grid_42_52" class="field"></div></td><td><div id="grid_43_52" class="field"></div></td><td><div id="grid_44_52" class="field"></div></td><td><div id="grid_45_52" class="field"></div></td><td><div id="grid_46_52" style="position:relative;z-Index:1;" onclick="selectCrosswordField(46,52)" class="field filled"> </div></td><td><div id="grid_47_52" class="field"></div></td><td><div id="grid_48_52" class="field"></div></td><td><div id="grid_49_52" class="field"></div></td><td><div id="grid_50_52" class="field"></div></td><td><div id="grid_51_52" class="field"></div></td><td><div id="grid_52_52" class="field"></div></td></tr><tr><td><div id="grid_41_53" class="field"></div></td><td><div id="grid_42_53" class="field"></div></td><td><div id="grid_43_53" class="field"></div></td><td><div id="grid_44_53" class="field"></div></td><td><div id="grid_45_53" class="field"></div></td><td><div id="grid_46_53" style="position:relative;z-Index:1;" onclick="selectCrosswordField(46,53)" class="field filled"> </div></td><td><div id="grid_47_53" class="field"></div></td><td><div id="grid_48_53" class="field"></div></td><td><div id="grid_49_53" class="field"></div></td><td><div id="grid_50_53" class="field"></div></td><td><div id="grid_51_53" class="field"></div></td><td><div id="grid_52_53" class="field"></div></td></tr><tr><td><div id="grid_41_54" class="field"></div></td><td><div id="grid_42_54" class="field"></div></td><td><div id="grid_43_54" class="field"></div></td><td><div id="grid_44_54_number" onclick="selectCrosswordField(44,54)" style="z-Index:3;cursor:pointer;position:absolute;font-size:6pt;margin:2px">6</div><div id="grid_44_54" style="position:relative;z-Index:1;" onclick="selectCrosswordField(44,54)" class="field filled"> </div></td><td><div style="position: absolute; z-index: 2;"><div style="cursor:pointer;position:absolute;" onclick="selectCrosswordField(45,54)"><div class="field solution" style="position:absolute"></div><div style="font-size:5pt;margin:2px;margin-top:2.6em">II</div></div></div><div id="grid_45_54" style="position:relative;z-Index:1;" onclick="selectCrosswordField(45,54)" class="field filled"> </div></td><td><div style="position: absolute; z-index: 2;"><div style="cursor:pointer;position:absolute;" onclick="selectCrosswordField(46,54)"><div class="field solution" style="position:absolute"></div><div style="font-size:5pt;margin:2px;margin-top:2.6em">III</div></div></div><div id="grid_46_54" style="position:relative;z-Index:1;" onclick="selectCrosswordField(46,54)" class="field filled"> </div></td><td><div style="position: absolute; z-index: 2;"><div style="cursor:pointer;position:absolute;" onclick="selectCrosswordField(47,54)"><div class="field solution" style="position:absolute"></div><div style="font-size:5pt;margin:2px;margin-top:2.6em">IV</div></div></div><div id="grid_47_54" style="position:relative;z-Index:1;" onclick="selectCrosswordField(47,54)" class="field filled"> </div></td><td><div id="grid_48_54" class="field"></div></td><td><div id="grid_49_54" class="field"></div></td><td><div id="grid_50_54" class="field"></div></td><td><div id="grid_51_54" class="field"></div></td><td><div id="grid_52_54" class="field"></div></td></tr><tr><td><div id="grid_41_55" class="field"></div></td><td><div id="grid_42_55" class="field"></div></td><td><div id="grid_43_55" class="field"></div></td><td><div id="grid_44_55" class="field"></div></td><td><div id="grid_45_55" class="field"></div></td><td><div id="grid_46_55" class="field"></div></td><td><div id="grid_47_55" class="field"></div></td><td><div id="grid_48_55" class="field"></div></td><td><div id="grid_49_55" class="field"></div></td><td><div id="grid_50_55" class="field"></div></td><td><div id="grid_51_55" class="field"></div></td><td><div id="grid_52_55" class="field"></div></td></tr></tbody></table><div id="solutionword" style="padding-left:1em;margin:10px;max-width:90%;width:10em"><div class="" style="float:left;position:relative"><div class="field solution" style="cursor:default;z-Index:2;position:absolute;"></div><div style="cursor:default;z-Index:3;position:absolute;font-size:5pt;margin:2px;margin-top:2.6em">I</div><div class="field filled" style="cursor:default;position:relative" id="solutionword0"></div></div><div class="" style="float:left;position:relative"><div class="field solution" style="cursor:default;z-Index:2;position:absolute;"></div><div style="cursor:default;z-Index:3;position:absolute;font-size:5pt;margin:2px;margin-top:2.6em">II</div><div class="field filled" style="cursor:default;position:relative" id="solutionword1"></div></div><div class="" style="float:left;position:relative"><div class="field solution" style="cursor:default;z-Index:2;position:absolute;"></div><div style="cursor:default;z-Index:3;position:absolute;font-size:5pt;margin:2px;margin-top:2.6em">III</div><div class="field filled" style="cursor:default;position:relative" id="solutionword2"></div></div><div class="" style="float:left;position:relative"><div class="field solution" style="cursor:default;z-Index:2;position:absolute;"></div><div style="cursor:default;z-Index:3;position:absolute;font-size:5pt;margin:2px;margin-top:2.6em">IV</div><div class="field filled" style="cursor:default;position:relative" id="solutionword3"></div></div><div style="clear:both"></div></div></td></tr></tbody></table></div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+
+var videoCounter = 0;
+// debug test
+
+var items = new Array();
+
+function formatContent(name,id){
+    var v = AppClient.getParameter(name);
+    var t = AppClient.getParameterType(name);
+    var a = v.split("|");
+
+    if(v == "" || v == "|") return "";
+	
+	if (t == "text")  {
+	     return '<div id="item'+id+'">'+AppClient.linkifyText(a[0])+
+                    '<br><small>'+AppClient.linkifyText(a[1])+'</small></div>';
+	}
+	if (t == "image"){
+		
+        return '<div id="item'+id+'"><img id="contentImage'+id+'" src="'+a[0]+'" alt="" style="display:block;max-width:100%;max-height:300px"/> <small>'+AppClient.linkifyText(a[1])+'</small></div>';
+    }
+	if (t == "audio"){
+		videoCounter++;
+		var s = "";
+		s += '<div id="item'+id+'"><center><div style="display:block; width:240px;height:50px"><div style="width:100%; height:50px" id="audio'+videoCounter+'">YouTube Audio</div></div></center>';
+		s += '<small>'+(a.length > 3 ? AppClient.linkifyText(a[3]) : '')+'</small></div>';
+		window.setTimeout('if(document.getElementById("audio'+videoCounter+'")) AppClient.loadAudio("'+name+'","audio'+videoCounter+'");',200);
+		return s;
+	}
+	if (t == "speech"){
+		videoCounter++;
+		var s = "";
+		s += '<div id="item'+id+'" style="text-align:center"><center><div style="display:block; width:240px;height:50px"><div style="width:100%; height:50px" id="speech'+videoCounter+'">Speech</div></div></center>';
+		s += '<small>'+(a.length > 2 ? AppClient.linkifyText(a[2]) : '')+'</small></div>';
+		window.setTimeout('if(document.getElementById("speech'+videoCounter+'")) AppClient.loadSpeech("'+name+'","speech'+videoCounter+'");',200);
+		return s;
+	}
+	if (t == "video"){
+		videoCounter++;
+		var s = "";
+		s += '<center><div style="display:block; width:480px;height:320px"><div style="width:100%; height:320px" id="video'+videoCounter+'">YouTube Video</div></div></center><br>'; 
+		s += '<small>'+(a.length > 4 ? AppClient.linkifyText(a[4]) : '')+'</small>';
+		window.setTimeout('if(document.getElementById("video'+videoCounter+'")) AppClient.loadVideoDirect("'+name+'","video'+videoCounter+'",true);',200);
+		return s;
+	}
+	return "";
+}
+
+var question = 0;
+for (var i = 0; i < 50; i++) {
+ var word = trim(AppClient.getParameter("word"+i,""));
+ if(trim(word) == "") continue;
+ question++;
+ var item = new Object();
+ item.word = word.replace(/ /g,"").toUpperCase();
+ item.id = question;
+ items.push(item);
+}
+ 
+var cross = createCrosswordGrid(items,["-","|"],(AppClient.getParameter("fixiert") == "true" ? trim(AppClient.getParameter("loesungswort")) : ""));
+document.getElementById("k").innerHTML = displayCrosswordGrid(cross);
+setTimeout(function(){
+ buildSolutionWord(cross,trim(AppClient.getParameter("loesungswort")));
+},100);
+
+background = AppClient.getParameter("backgroundImage","");
+if(background != "") {
+ document.getElementById("crossword").style.background = "transparent url('"+background+"') center center no-repeat"; 
+}
+
+function onGetContent(id){
+ var question = 0;
+ for (var i = 0; i < 50; i++) {
+  var word = trim(AppClient.getParameter("word"+i,""));
+  if(trim(word) == "") continue;
+  question++;
+  if(question == id){
+   return formatContent("hint"+i,i);
+  }
+ }
+}
+function onCrosswordSolved(){
+ AppClient.setSolved();
+ var s = AppClient.getParameter("feedback","Prima, alles richtig!");
+ s = s.replace(/\r/g,"");
+ s = s.replace(/\n/g,"<br>");
+ var d = document.getElementById("feedback_inner");
+ d.innerHTML = AppClient.linkifyText(s);
+ 
+ var d = document.getElementById("feedback");
+ d.style.display = "block";
+}
+
+/* ]]> */
+
+</script>
+<div id="feedback" class="feedback" style="display:none;position:absolute;left:50%;margin-left:-150px;top:20%;max-height:60%;width:300px;padding:10px;">
+<div id="feedback_inner"></div><br><br>
+<center><input type="button" style="font-size:120%;" onclick="document.getElementById(&#39;feedback&#39;).style.display=&#39;none&#39;;" value="OK"></center>
+</div>
+
+<style type="text/css">
+html,body{height:100%}
+
+body{
+ font-family:Arial;
+ margin:0px;
+ padding:0px;
+}
+
+.feedback{
+ -webkit-border-radius:15px;
+ -moz-border-radius:15px;
+ border-radius:15px;
+
+ box-shadow: 0 3px 6px rgba(0,0,0,.5);
+ -webkit-box-shadow: 0 3px 6px rgba(0,0,0,.5); 
+ -moz-box-shadow: 0 3px 6px rgba(0,0,0,.5);
+ -ms-box-shadow: 0 3px 6px rgba(0,0,0,.5);
+ -o-box-shadow: 0 3px 6px rgba(0,0,0,.5);
+
+ border:10px solid #ddd;
+ background:white;
+ z-index:100000;
+}
+ .solution{
+  -moz-opacity:.25; 
+  filter:alpha(opacity=25); 
+  opacity:.25;
+  background:#ffde8e;
+ }
+ .filled{
+  -moz-box-shadow: 0 0 5px #888;
+  -webkit-box-shadow: 0 0 5px #888;
+  box-shadow: 0 0 5px #888;	
+  border:1px solid #999;
+  background:#FFF;
+  cursor:pointer;
+ }
+ .field{
+  font-family:Arial;
+  font-weight:bold;
+  margin:0px;
+  width:2em;
+  height:2em;
+  padding:0.25em;
+  text-align:center;
+  vertical-align:middle;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;  
+ }
+ .highlight{
+  background:#d3ddff;
+ } 
+ .blink{
+  background:#fff;
+  animation: blink 1s step-start 0s infinite;
+  -webkit-animation: blink 1s step-start 0s infinite;
+ } 
+ @keyframes blink {
+  50% {
+    background:lightgreen;
+  }
+ }
+ @-webkit-keyframes blink {
+  50% {
+    background:lightgreen;
+  }
+ } 
+  
+ .inputElement{
+  width:2em;
+  height:2em;
+  text-align:center;
+  font-family:Arial;
+  font-weight:bold;
+  text-transform: uppercase;
+
+ }
+
+</style>
+</div>
+
+<div id="questionSidePanel" style="text-align:left;width:80%;position:absolute;top:20px;left:50%;margin-left:-40%;display:none;z-index:100;">
+<div style=" position:absolute;width:100%;height:100%;background:white;opacity:0.9;border:1px solid #999;"></div>
+<div style="position:absolute;right:5px;top:5px;cursor:pointer;z-index:20" onclick="closeQuestionSidePanel()"><img src="./close.png" alt="Close"></div>
+<div id="questionDisplay" style="position:relative;padding:10px"></div>
+</div>
+
+
+
+
+<div id="AppClientTaskPanel" style="box-sizing: border-box; font-family: Arial; position: absolute; left: 0px; top: 20%; max-height: 65%; overflow: auto; z-index: 999998; padding: 10px; border: 10px solid rgb(221, 221, 221); box-shadow: rgb(51, 51, 51) 0px 0px 10px; border-radius: 10px; background-color: rgb(255, 255, 255); width: 40%; margin-left: 30%; margin-right: 30%;"><p style="text-align:center;font-size:150%;padding:0px;margin:0px;margin-bottom:5px"><b>Άσκηση</b></p><div style="max-height:195px;overflow:auto;">Λύσε το σταυρόλεξο για να ελέγξεις τις γνώσεις σου!!!! Συμπλήρωσε  με τους σωστούς όρους.</div><div style="margin-top:10px;text-align:center"><button type="button" onclick="AppClient.closeTaskPanel()" style="font-size:120%;z-index: 2;position: relative;">OK</button></div></div><div id="AppClientTaskButton" style="position: fixed; width: 16px; left: 2px; top: 2px; z-index: 999997;"><a style="padding:0px; margin:0px; text-decoration:none; font-size:16px" href="JavaScript:AppClient.showTaskPanel()"><img border="0" style="vertical-align:top" src="./taskicon.gif" title="Εμφάνιση άσκησης" alt=""></a></div><div id="AppClientHelpButton" style="position: fixed; width: 16px; left: 22px; top: 2px; z-index: 999997; display: none;"><a style="padding:0px; margin:0px; text-decoration:none; font-size:16px" href="JavaScript:AppClient.showHelpPanel()"><img border="0" style="vertical-align:top" src="./helpicon.png" title="Εμφάνιση βοήθειας" alt=""></a></div><div id="AppClientFullscreenButton" style="position: fixed; width: 16px; right: 2px; top: 2px; z-index: 999997;"><a style="padding:0px; margin:0px; text-decoration:none; font-size:16px" href="https://learningapps.org/watch?v=pg96pok5a23" onclick="return AppClient.doFullscreen()" target="_blank"><img border="0" style="vertical-align:top" src="./fullscreenicon.png" title="Εμφάνιση της εφαρμογής σε πλήρη οθόνη" alt=""></a></div></body><grammarly-desktop-integration data-grammarly-shadow-root="true"><template shadowrootmode="open"><style>
+  div.grammarly-desktop-integration {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select:none;
+    user-select:none;
+  }
+
+  div.grammarly-desktop-integration:before {
+    content: attr(data-content);
+  }
+</style><div aria-label="grammarly-integration" role="group" tabindex="-1" class="grammarly-desktop-integration" data-content="{&quot;mode&quot;:&quot;full&quot;,&quot;isActive&quot;:true,&quot;isUserDisabled&quot;:false}"></div></template></grammarly-desktop-integration></html>
